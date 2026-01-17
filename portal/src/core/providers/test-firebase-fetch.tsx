@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "../config/firebase";
+import { firestore } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 interface TestDataContextValue {
@@ -28,7 +28,7 @@ export const FetchFirebaseDataProvider = ({ children }: ProviderProps) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const snapshot = await getDocs(collection(db, "test"));
+      const snapshot = await getDocs(collection(firestore, "test"));
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
