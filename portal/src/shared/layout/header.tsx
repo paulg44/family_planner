@@ -22,6 +22,7 @@ const Header = () => {
       </header>
 
       <p>{userData?.name}</p>
+      <p>{userData?.totalEarned}</p>
 
       <Form name="basic" layout="vertical">
         <Form.Item
