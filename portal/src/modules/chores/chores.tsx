@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { type Chore, getChores } from "../../services/chores.service";
 import SharedTable from "../../shared/table/table";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, InputNumber, Select } from "antd";
 import UserService from "../../services/user.service";
 import type { IUserDao } from "../../core/dao/user.dao";
 
@@ -50,22 +50,20 @@ const Chores = () => {
     <div className="p-4 flex flex-col ">
       <h2>Chores Component</h2>
       <SharedTable columns={columns} dataSource={chores} />
-      <Form
-        name="add-chore"
-        layout="vertical"
-        className="mt-4 w-1/2 flex flex-col gap-4 "
-      >
+      <Form name="add-chore" layout="vertical" className="mt-4 w-1/2">
         <Form.Item label="Chore Name" name="choreName">
           <Input />
         </Form.Item>
         <Form.Item label="Reward" name="reward">
-          <Input />
+          <InputNumber />
         </Form.Item>
         <Form.Item label="Child?" name="assignedTo">
           <Select placeholder="Select a child">
-            {/* Change these for child users */}
-            <Select.Option value="child1">Child 1</Select.Option>
-            <Select.Option value="child2">Child 2</Select.Option>
+            {usersWithChildRole.map((user) => (
+              <Select.Option key={user.id} value={user.id}>
+                {user.name || user.email}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item>
