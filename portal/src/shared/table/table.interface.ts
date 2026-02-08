@@ -1,16 +1,18 @@
 import type { TableColumnsType } from "antd";
 import type React from "react";
+import type { Chore } from "../../services/chores.service";
 
 export interface ISharedTable {
   columns: TableColumnsType<ISharedTableColumn>;
-  dataSource: ISharedTableColumn[];
+  dataSource: ISharedTableColumn[] | Chore[];
 }
 
 export interface ISharedTableColumn {
-  key: React.Key;
+  id: string;
+  key?: React.Key;
   name: string;
-  rewards: number;
+  reward: number;
   assignedTo: string;
-  completed: boolean;
-  assignee: string;
+  complete: boolean;
+  assignedBy: string;
 }

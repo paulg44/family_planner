@@ -1,52 +1,37 @@
-import { useTestData } from "../../core/providers/test-firebase-fetch";
-import ChoresService from "../../services/chores.service";
+import { useEffect, useState } from "react";
+import { getChores, type Chore } from "../../services/chores.service";
 import SharedTable from "../../shared/table/table";
 
 const Dashboard = () => {
-  const { testData } = useTestData();
-  console.log("Dashboard testData:", testData);
+  const [chores, setChores] = useState<Chore[]>([]);
+  console.log("Chores in Dashboard:", chores);
 
-  const testDataSource = [
-    {
-      key: "1",
-      name: "Sample Item",
-      rewards: 10,
-      assignedTo: "user one",
-      completed: false,
-      assignee: "adult one",
-    },
-    {
-      key: "2",
-      name: "Another Item",
-      rewards: 20,
-      assignedTo: "user two",
-      completed: true,
-      assignee: "adult two",
-    },
-  ];
+  useEffect(() => {
+    const fetchChores = async () => {
+      try {
+        const fetchChores = await getChores();
+        setChores(fetchChores);
+      } catch (error) {
+        console.error("Error fetching chores:", error);
+      }
+    };
 
-  const testColumns = [
+    fetchChores();
+  }, []);
+
+  const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Rewards", dataIndex: "rewards", key: "rewards" },
+    { title: "Rewards", dataIndex: "reward", key: "reward" },
     { title: "Assigned To", dataIndex: "assignedTo", key: "assignedTo" },
-    { title: "Completed", dataIndex: "completed", key: "completed" },
-    { title: "Assignee", dataIndex: "assignee", key: "assignee" },
+    { title: "Completed", dataIndex: "complete", key: "complete" },
+    { title: "Assignee", dataIndex: "assignedBy", key: "assignedBy" },
   ];
-
-  const choresData = ChoresService.getChores();
-  console.log("Dashboard choresData:", choresData);
 
   return (
     <div>
       <h2>Dashboard Component</h2>
-      {testData.map((item) => (
-        <div key={item.id}>
-          <p>ID: {item.id}</p>
-          <p>Name: {item.name}</p>
-        </div>
-      ))}
 
-      <SharedTable columns={testColumns} dataSource={testDataSource} />
+      <SharedTable columns={columns} dataSource={chores} />
     </div>
   );
 };

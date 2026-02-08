@@ -1,20 +1,36 @@
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../core/config/firebase";
 
-const getChores = async () => {
+export interface Chore {
+  id: string;
+  name: string;
+  reward: number;
+  assignedBy: string;
+  assignedTo: string;
+  complete: boolean;
+}
+
+export const getChores = async () => {
   try {
     const collectionRef = collection(firestore, "chores");
     const snap = await getDocs(collectionRef);
-    return snap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const choresData: Chore[] = [];
+
+    snap.forEach((doc) => {
+      const data = doc.data();
+      choresData.push({
+        id: doc.id,
+        name: data.name,
+        reward: data.reward,
+        assignedBy: data.assignedBy,
+        assignedTo: data.assignedTo,
+        complete: data.complete,
+      });
+    });
+
+    return choresData;
   } catch (error) {
     console.error("Error fetching document:", error);
     throw error;
   }
 };
-
-const ChoresService = { getChores };
-
-export default ChoresService;
