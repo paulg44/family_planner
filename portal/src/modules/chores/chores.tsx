@@ -1,10 +1,29 @@
 import { useState, useEffect } from "react";
 import { type Chore, getChores } from "../../services/chores.service";
 import SharedTable from "../../shared/table/table";
+import { Button, Form, Input, Select } from "antd";
+import UserService from "../../services/user.service";
+import type { IUserDao } from "../../core/dao/user.dao";
 
 const Chores = () => {
+  // Fetch the users by role to display in the dropdown for assigning chores. Use the signed in data to determine the assigned by field when creating a new chore. Use the status on completed, click to change status. Send notification to assignedBy
   const [chores, setChores] = useState<Chore[]>([]);
-  console.log("Chores in Dashboard:", chores);
+  const [users, setUsers] = useState<IUserDao[]>([]);
+  const usersWithChildRole = users.filter((user) => user.role === "child");
+  console.log("Users with child role:", usersWithChildRole);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchUsers = await UserService.allUsers();
+        setUsers(fetchUsers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     const fetchChores = async () => {
@@ -28,10 +47,31 @@ const Chores = () => {
   ];
 
   return (
-    <div>
+    <div className="p-4 flex flex-col ">
       <h2>Chores Component</h2>
-
       <SharedTable columns={columns} dataSource={chores} />
+      <Form
+        name="add-chore"
+        layout="vertical"
+        className="mt-4 w-1/2 flex flex-col gap-4 "
+      >
+        <Form.Item label="Chore Name" name="choreName">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Reward" name="reward">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Child?" name="assignedTo">
+          <Select placeholder="Select a child">
+            {/* Change these for child users */}
+            <Select.Option value="child1">Child 1</Select.Option>
+            <Select.Option value="child2">Child 2</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary">Add Chore</Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

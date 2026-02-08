@@ -9,7 +9,7 @@ export interface Chore {
   assignedTo: string;
   complete: boolean;
 }
-
+// Change to collection like users
 export const getChores = async () => {
   try {
     const collectionRef = collection(firestore, "chores");

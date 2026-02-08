@@ -3,4 +3,5 @@ export interface IUserDao {
   name: string;
   id: string;
   totalEarned?: number;
+  role: "parent" | "child";
 }
