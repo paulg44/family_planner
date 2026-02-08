@@ -3,9 +3,8 @@ import type { ISharedForm } from "./form.interface";
 
 const SharedForm = <T,>({
   formInstance,
-  title,
   disabled,
-  fields,
+  // fields,
   className = "p-4",
   initialValues,
   onFinish,
@@ -16,13 +15,16 @@ const SharedForm = <T,>({
   const [form] = Form.useForm();
   return (
     <>
-      <Form>
-        {fields
-          //   .filter((field) => !field.hidden)
-          .map((field) => (
-            <div key={field}></div>
-          ))}
-      </Form>
+      <Form
+        onFinish={onFinish}
+        onValuesChange={onChange}
+        requiredMark={requiredMark}
+        form={formInstance || form}
+        layout={layout}
+        className={className}
+        initialValues={initialValues}
+        disabled={disabled}
+      ></Form>
     </>
   );
 };

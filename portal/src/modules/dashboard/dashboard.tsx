@@ -1,4 +1,5 @@
 import { useTestData } from "../../core/providers/test-firebase-fetch";
+import ChoresService from "../../services/chores.service";
 import SharedTable from "../../shared/table/table";
 
 const Dashboard = () => {
@@ -31,6 +32,9 @@ const Dashboard = () => {
     { title: "Completed", dataIndex: "completed", key: "completed" },
     { title: "Assignee", dataIndex: "assignee", key: "assignee" },
   ];
+
+  const choresData = ChoresService.getChores();
+  console.log("Dashboard choresData:", choresData);
 
   return (
     <div>
