@@ -16,13 +16,13 @@ const Header = () => {
     console.log("Login result:", authResult);
   };
   return (
-    <>
-      <header className="bg-blue-600 text-white p-4">
+    <div className="w-full flex">
+      <header className="w-4/5 bg-blue-600 text-white p-4">
         <h1 className="text-2xl font-bold">Family Planner</h1>
       </header>
 
-      <p>{userData?.name}</p>
-      <p>{userData?.totalEarned}</p>
+      {/* <p>{userData?.name}</p>
+      <p>{userData?.totalEarned}</p> */}
 
       <Form name="basic" layout="vertical">
         <Form.Item
@@ -47,7 +47,7 @@ const Header = () => {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 };
 
