@@ -1,18 +1,11 @@
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../core/config/firebase";
+import { CollectionID } from "../core/constants/collection-id";
+import type { Chore } from "../core/dao/chore.dao";
 
-export interface Chore {
-  id: string;
-  name: string;
-  reward: number;
-  assignedBy: string;
-  assignedTo: string;
-  complete: boolean;
-}
-// Change to collection like users
 export const getChores = async () => {
   try {
-    const collectionRef = collection(firestore, "chores");
+    const collectionRef = collection(firestore, CollectionID.CHORES);
     const snap = await getDocs(collectionRef);
     const choresData: Chore[] = [];
 
