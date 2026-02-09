@@ -1,9 +1,9 @@
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { firestore } from "../core/config/firebase";
 import { CollectionID } from "../core/constants/collection-id";
 import type { Chore } from "../core/dao/chore.dao";
 
-export const getChores = async () => {
+const getChores = async () => {
   try {
     const collectionRef = collection(firestore, CollectionID.CHORES);
     const snap = await getDocs(collectionRef);
@@ -27,3 +27,21 @@ export const getChores = async () => {
     throw error;
   }
 };
+
+const addChore = async (choreData: Chore) => {
+  try {
+    const collectionRef = collection(firestore, CollectionID.CHORES);
+    const docRef = await addDoc(collectionRef, choreData);
+    return docRef.id;
+  } catch (error) {
+    console.error("Error adding chore:", error);
+    throw error;
+  }
+};
+
+const ChoresService = {
+  getChores,
+  addChore,
+};
+
+export default ChoresService;
