@@ -12,7 +12,7 @@ const getChores = async () => {
     snap.forEach((doc) => {
       const data = doc.data();
       choresData.push({
-        id: doc.id,
+        uid: doc.id,
         name: data.name,
         reward: data.reward,
         assignedBy: data.assignedBy,
@@ -34,7 +34,7 @@ const addChore = async (choreData: Chore) => {
     const docRef = await addDoc(collectionRef, choreData);
     return docRef.id;
   } catch (error) {
-    console.error("Error adding chore:", error);
+    console.error("Error adding chore in services:", error);
     throw error;
   }
 };

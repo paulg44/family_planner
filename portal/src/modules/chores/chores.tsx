@@ -5,9 +5,12 @@ import { Button, Form, Input, InputNumber, Select } from "antd";
 import UserService from "../../services/user.service";
 import type { IUserDao } from "../../core/dao/user.dao";
 import type { Chore } from "../../core/dao/chore.dao";
+import { useUserState } from "../../core/providers/user-provider";
+import { v4 as uuidv4 } from "uuid";
 
 const Chores = () => {
-  // Fetch the users by role to display in the dropdown for assigning chores. Use the signed in data to determine the assigned by field when creating a new chore. Use the status on completed, click to change status. Send notification to assignedBy
+  // FWorks to add chore but the table needs refreshing to show the new chore. Need to figure out how to update the table after adding a chore
+  const { userData } = useUserState();
   const [chores, setChores] = useState<Chore[]>([]);
   const [users, setUsers] = useState<IUserDao[]>([]);
   const usersWithChildRole = users.filter((user) => user.role === "child");
@@ -47,11 +50,14 @@ const Chores = () => {
     const payload = {
       uid: uuidv4(),
       assignedTo: selectedUser,
-      reward,
+      reward: reward,
       name: choreName,
+      assignedByUid: userData?.id,
+      assignedBy: userData?.name || "Unknown",
+      complete: false,
     };
     try {
-      const newChoreId = await ChoresService.addChore(choreData);
+      const newChoreId = await ChoresService.addChore(payload);
       const newChore = { ...choreData, uid: newChoreId };
       setChores((prevChores) => [...prevChores, newChore]);
     } catch (error) {
@@ -71,7 +77,12 @@ const Chores = () => {
     <div className="p-4 flex flex-col ">
       <h2>Chores Component</h2>
       <SharedTable columns={columns} dataSource={chores} />
-      <Form name="add-chore" layout="vertical" className="mt-4 w-1/2">
+      <Form
+        name="add-chore"
+        layout="vertical"
+        className="mt-4 w-1/2"
+        onFinish={submit}
+      >
         <Form.Item label="Chore Name" name="choreName" required>
           <Input onChange={(e) => setChoreName(e.target.value)} />
         </Form.Item>
@@ -88,14 +99,14 @@ const Chores = () => {
             onChange={(value) => setSelectedUser(value)}
           >
             {usersWithChildRole.map((user) => (
-              <Select.Option key={user.id} value={user.id}>
+              <Select.Option key={user.id} value={user.name}>
                 {user.name}
               </Select.Option>
             ))}
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onSubmit={() => submit}>
+          <Button type="primary" htmlType="submit">
             Add Chore
           </Button>
         </Form.Item>

@@ -1,8 +1,8 @@
 export interface Chore {
-  id: string;
+  uid: string;
   name: string;
   reward: number;
-  assignedBy: string;
+  assignedBy: string | undefined;
   assignedTo: string;
   complete: boolean;
 }
