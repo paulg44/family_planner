@@ -3,6 +3,7 @@ import DashboardRouting from "../../modules/dashboard/dashboard-routing";
 import CalendarRouting from "../../modules/calendar/calendar-routing";
 import LayoutRouting from "./layout-routing";
 import ChoresRouting from "../../modules/chores/chores-routing";
+import EventsRouting from "../../modules/events/events-routing";
 
 const AppRouting = () => {
   return (
@@ -11,6 +12,7 @@ const AppRouting = () => {
         <Route path="/dashboard/*" element={<DashboardRouting />} />
         <Route path="/calendar/*" element={<CalendarRouting />} />
         <Route path="/chores/*" element={<ChoresRouting />} />
+        <Route path="/events/*" element={<EventsRouting />} />
       </Route>
     </Routes>
   );
